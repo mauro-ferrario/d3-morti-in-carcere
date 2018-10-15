@@ -40,13 +40,13 @@ export default class{
         const peopleBlock = this.chart.append('g').attr('class','people');
         let data = this.dataHandler.getData().people;
         data = this.dataHandler.getOrderArray(data, 'reason');
-        this.people = new peopleChart(peopleBlock, data, this.width);
+        this.people = new peopleChart(peopleBlock, data, this.width, 40);
     }
 
     setupPrisons(){
         const prisonsBlock = this.chart.append('g').attr('class','prisons').attr('transform','translate(0,40)');
         let data = this.dataHandler.getData().prisons;
-        data = this.dataHandler.getOrderArray(data, 'deadData');
-        this.prisons = new prisonsChart(prisonsBlock, data, this.width);
+        data = this.dataHandler.getOrderArray(data, 'deadPeople');
+        this.prisons = new prisonsChart(prisonsBlock, data, this.width, 40);
     }
 }

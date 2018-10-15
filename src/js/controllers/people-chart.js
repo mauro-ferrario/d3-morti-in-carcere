@@ -1,9 +1,12 @@
 import * as d3 from "d3";
+import barsChart from "./bars-chart";
 
-export default class{
-    constructor(chart, data, maxChartWidth){
-        this.chart = chart;
-        this.data = data;
+export default class extends barsChart{
+    constructor(chartNode, data, maxChartWidth, maxBarHeight){
+        super(chartNode, data, maxChartWidth, maxBarHeight);
+    }
+
+    extraSettingsBeforeCreateBars(){
         this.reasonColors = [
             'rgb(125,179,12)',
             'rgb(240,158,16)',
@@ -11,17 +14,14 @@ export default class{
             'rgb(74,32,171)',
             'rgb(0,230,255)'
         ];
-        this.maxChartWidth = maxChartWidth;
-        this.barWidth = this.maxChartWidth/this.data.length;
-        this.maxBarHeight = 40;
-        this.convertIntoRangeAge = d3.scaleLinear().range([0, this.maxBarHeight]);
-        this.convertIntoRangeAge.domain([0, d3.max(data, function(d) { return d.age; })])
-        this.peopleBars = this.createMainPeopleGroups();
-        this.createSinglePeopleContent();
     }
 
-    createSinglePeopleContent(){
-        this.peopleBars.append("rect")
+    setBarsDomain(data){
+        this.barConvertIntoRange.domain([0, d3.max(data, function(d) { return d.age; })])
+    }
+
+    createSingleBarsContent(){
+        this.bars.append("rect")
             .attr("y", (d) => { return 0; })
             .attr("height", (d) => { 
                 return this.maxBarHeight; 
@@ -30,21 +30,14 @@ export default class{
             .attr("width", () =>{
                 return this.barWidth
             });
-        this.peopleBars.append("rect")
+        this.bars.append("rect")
             .attr('class', 'person-age')
-            .attr("y", (d) => { return this.maxBarHeight - this.convertIntoRangeAge(d.age); })
+            .attr("y", (d) => { return this.maxBarHeight - this.barConvertIntoRange(d.age); })
             .attr("height", (d) => { 
-                return this.convertIntoRangeAge(d.age); 
+                return this.barConvertIntoRange(d.age); 
             })
             .attr("width", () =>{
                 return this.barWidth
             });
-    }
-
-    createMainPeopleGroups(){
-        return this.chart.selectAll("g")
-            .data(this.data)
-            .enter().append("g")
-                .attr("transform", (d, i) => { return "translate(" + i * this.barWidth + ", 0)"; });
     }
 }
