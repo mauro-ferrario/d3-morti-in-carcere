@@ -1,5 +1,11 @@
 [data-controller="d3-class-name"]{
   [class^="chart"]{
+    .person-age{
+      fill: black;
+    }
+    .dead-people{
+      fill: yellow;
+    }
   } 
 }
   

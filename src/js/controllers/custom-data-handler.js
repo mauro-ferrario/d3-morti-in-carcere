@@ -26,10 +26,11 @@ export default class extends dataHandler{
         this.data.people = [];
         data.map((info)=>{
             const prisonId = this.getPrisonIdFromPrisonEmail(info['Email']);
+            this.data.prisons[prisonId].deadPeople++;
             this.data.people.push({
                 deathData: info['Data del decesso'],
                 name: info['Nome'],
-                age: info['age'],
+                age: +info['age'],
                 reason: this.getReasonId(info['reason'])
             });
         });
@@ -66,7 +67,8 @@ export default class extends dataHandler{
                     name: info['Istituto penitenziario'],
                     address: info['Indirizzo'],
                     phone: info['Telefono'],
-                    email: instituteMail
+                    email: instituteMail,
+                    deadPeople: 0
                 };
                 prisonsObj[instituteMail] = instituteInfo;
                 prisons.push(instituteInfo);
@@ -80,5 +82,21 @@ export default class extends dataHandler{
             return prison.email == email
         });
         return foundPrison.id;
+    }
+
+    compare(orderValue) {
+        return function(a,b){
+            if (a[orderValue] < b[orderValue])
+                return -1;
+             if (a[orderValue] > b[orderValue])
+                return 1;
+          return 0;
+        }
+        console.log(orderValue);
+        
+      }
+
+    getOrderArray(arr, orderValue){
+        return arr.sort(this.compare(orderValue));
     }
 }
