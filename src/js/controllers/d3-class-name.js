@@ -44,7 +44,7 @@ export default class{
     }
 
     setupPrisons(){
-        const prisonsBlock = this.chart.append('g').attr('class','prisons').attr('transform','translate(0,40)');
+        const prisonsBlock = this.chart.append('g').attr('class','prisons');
         let data = this.dataHandler.getData().prisons;
         data = this.dataHandler.getOrderArray(data, 'deadPeople');
         this.prisons = new prisonsChart(prisonsBlock, data, this.width, 40);
