@@ -25,13 +25,14 @@ export default class extends dataHandler{
         this.data.prisons = this.createPrisonsArray(data);
         this.data.people = [];
         data.map((info)=>{
-            const prisonId = this.getPrisonIdFromPrisonEmail(info['Email']);
+            const prisonId = this.getPrisonIdFromPrisonEmail(this.data.prisons, info['Email']);
             this.data.prisons[prisonId].deadPeople++;
             this.data.people.push({
                 deathData: info['Data del decesso'],
                 name: info['Nome'],
                 age: +info['age'],
-                reason: this.getReasonId(info['reason'])
+                reason: this.getReasonId(info['reason']),
+                prisonId: prisonId
             });
         });
     }
@@ -77,11 +78,22 @@ export default class extends dataHandler{
         return prisons;
     }
 
-    getPrisonIdFromPrisonEmail(email){
-        const foundPrison = this.data.prisons.find((prison) => {
+    // Pass the data array because we could want to search on different order array
+
+    getPrisonIdFromPrisonEmail(prisonData, email){
+        const foundPrison = prisonData.find((prison) => {
             return prison.email == email
         });
         return foundPrison.id;
+    }
+
+    getPrisonPosFromPrisonId(prisonData, prisonId){
+        let foundPrison = -1;
+        prisonData.map((prison, i) => {
+            if(prison.id == prisonId)
+                foundPrison = i;
+        });
+        return foundPrison;
     }
 
     compare(orderValue) {

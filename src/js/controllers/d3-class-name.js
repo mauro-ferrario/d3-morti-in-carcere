@@ -3,6 +3,7 @@ import CustomDataHandler from "./custom-data-handler";
 import {events as CustomDataEvents} from "./data-handler";
 import peopleChart from "./people-chart";
 import prisonsChart from "./prisons-chart";
+import lines from "./lines";
 require ("../../css/components/d3-class-name.scss");
 
 export default class{
@@ -10,6 +11,7 @@ export default class{
         this.el = el;
         this.dataHandler = new CustomDataHandler;
         this.setupChar();
+        this.prisonBarPositionY = this.charHeight - 140;
         this.readData('data/data.json');
     }
 
@@ -22,12 +24,13 @@ export default class{
     onDataReady(data){
         this.setupPeople();
         this.setupPrisons();
+        this.setupLines();
     }
 
     setupChar(){
         this.charWidth = window.innerWidth;
-        this.charHeight = 500;
-        this.margin = {top: 0, right: 50, bottom: 0, left: 50};
+        this.charHeight = window.innerHeight;
+        this.margin = {top: 50, right: 50, bottom: 50, left: 50};
         this.width = this.charWidth - this.margin.left - this.margin.right;
         this.height = this.charHeight - this.margin.top - this.margin.bottom;
         this.chart = d3.select('[data-controller="d3-class-name"] .chart')
@@ -48,5 +51,11 @@ export default class{
         let data = this.dataHandler.getData().prisons;
         data = this.dataHandler.getOrderArray(data, 'deadPeople');
         this.prisons = new prisonsChart(prisonsBlock, data, this.width, 40);
+        prisonsBlock.attr('transform','translate(0,'+this.prisonBarPositionY+')');
+    }
+
+    setupLines(){
+        const linesBlock = this.chart.append('g').attr('class','lines');
+        this.lines = new lines(linesBlock, this.people, this.prisons, this.dataHandler, this.prisonBarPositionY);
     }
 }
