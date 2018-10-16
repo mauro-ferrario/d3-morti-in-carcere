@@ -49,13 +49,13 @@ export default class{
     setupPrisons(){
         const prisonsBlock = this.chart.append('g').attr('class','prisons');
         let data = this.dataHandler.getData().prisons;
-        data = this.dataHandler.getOrderArray(data, 'deadPeople');
+        // data = this.dataHandler.getOrderArray(data, 'deadPeople');
         this.prisons = new prisonsChart(prisonsBlock, data, this.width, 40);
         prisonsBlock.attr('transform','translate(0,'+this.prisonBarPositionY+')');
     }
 
     setupLines(){
         const linesBlock = this.chart.append('g').attr('class','lines');
-        this.lines = new lines(linesBlock, this.people, this.prisons, this.dataHandler, this.prisonBarPositionY);
+        this.lines = new lines(linesBlock, this.people, this.prisons, this.dataHandler, this.prisonBarPositionY, 'bezier');
     }
 }
