@@ -27,20 +27,50 @@ export default class extends dataHandler{
         this.data.years = this.createYearsGroupsArray();
         this.data.prisons = this.createPrisonsArray(data);
         this.data.people = [];
+        // this.data.reasonsByAge = [
+        //     {
+        //         reasonId: 0,
+        //         years: {
+        //             2012: 10
+        //         }
+        //     }
+        // ];
+        this.data.reasonByAge = [];
+
+        this.data.reasons.map((reason, i)=>{
+            let yearsArr = [];
+            for(let a = 2002; a<= 2012; a++){
+                yearsArr.push(0);
+            };
+            this.data.reasonByAge.push({
+                reasonId: i,
+                years: yearsArr,
+                deadPeople: 0
+            });
+        });
+
+        console.log(this.data.reasonByAge);
+
         data.map((info)=>{
             const prisonId = this.getPrisonIdFromPrisonEmail(this.data.prisons, info['Email']);
             this.data.prisons[prisonId].deadPeople++;
             const yearOfDeath = +info['Data del decesso'].substring(info['Data del decesso'].lastIndexOf('/')+1);
             const yearIndex = this.data.years.length - (2012 - yearOfDeath)-1;
             this.data.years[yearIndex].deadPeople++;
+            const reasonId = this.getReasonId(info['reason']);
+            this.data.reasonByAge[reasonId].years[yearIndex]++;
+            this.data.reasonByAge[reasonId].deadPeople++;
             this.data.people.push({
                 deathData: info['Data del decesso'],
                 name: info['Nome'],
                 age: +info['age'],
-                reason: this.getReasonId(info['reason']),
+                reason: reasonId,
                 prisonId: prisonId
             });
         });
+        console.log("***");
+       // console.log(this.data.reasonByAge);
+        console.log("***");
     }
 
     getReasonId(reasonToCheck){

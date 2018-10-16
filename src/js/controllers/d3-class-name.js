@@ -25,6 +25,41 @@ export default class{
         this.setupPeople();
         this.setupPrisons();
         this.setupLines();
+        this.setupShapesReasonAndAge();
+    }
+
+    setupShapesReasonAndAge(){
+        const reasonAndAgeBlock = this.chart.append('g').attr('class','reasonAndAge').attr('transform','translate(0,200)');
+        let data = this.dataHandler.getData().reasonByAge[0];
+        console.log( data.deadPeople);
+        const convertIntoRange = d3.scaleLinear().range([0, this.width]);
+        convertIntoRange.domain([0, data.deadPeople])
+        console.log(data);
+        let cumulateX = 0;
+        let bars = reasonAndAgeBlock.selectAll("g")
+            .data(data.years)
+            .enter().append("g")
+                .attr("transform", (d, i) => {  
+                    const barWidth = convertIntoRange(d);
+                    const barPos = cumulateX;
+                    cumulateX += barWidth;
+                    return "translate(" + barPos + ", 0)"; 
+                });
+        // this.people = new peopleChart(peopleBlock, data, this.width, 40);
+
+        bars.append("rect")
+            .style('fill', (d,i) =>{
+                return 'rgb('+255/11*i+',0,0)';
+            })
+            .attr('class', 'dead-people')
+            .attr("y", (d) => { return 0; })
+            .attr("height", (d) => { 
+                return 100; 
+            })
+            .attr("width", (d) =>{
+                const barWidth = convertIntoRange(d);
+                return barWidth;
+            });
     }
 
     setupChar(){
