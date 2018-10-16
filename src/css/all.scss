@@ -10,9 +10,16 @@
 @import "helpers/hover";
 @import "components/all";
 
+html{
+    margin: 0;
+    padding: 0;
+}
+
 body{
     color: $main-text-color;
     @include RubikRegular;
     font-size: 16px;
     line-height: 22px;
+    margin: 0;
+    padding: 0;
 }
