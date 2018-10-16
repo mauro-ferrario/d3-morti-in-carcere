@@ -8,6 +8,8 @@ export default class extends dataHandler{
     manipulateData(data){
         this.data = {};
         this.createDataArrays(data);
+        console.log(this.data.years);
+        console.log(this.data.people);
     }
 
     createDataArrays(data){
@@ -22,11 +24,15 @@ export default class extends dataHandler{
             reason: "daAccertare"
         */
         this.data.reasons = this.createReasonsArray();
+        this.data.years = this.createYearsGroupsArray();
         this.data.prisons = this.createPrisonsArray(data);
         this.data.people = [];
         data.map((info)=>{
             const prisonId = this.getPrisonIdFromPrisonEmail(this.data.prisons, info['Email']);
             this.data.prisons[prisonId].deadPeople++;
+            const yearOfDeath = +info['Data del decesso'].substring(info['Data del decesso'].lastIndexOf('/')+1);
+            const yearIndex = this.data.years.length - (2012 - yearOfDeath)-1;
+            this.data.years[yearIndex].deadPeople++;
             this.data.people.push({
                 deathData: info['Data del decesso'],
                 name: info['Nome'],
@@ -44,6 +50,17 @@ export default class extends dataHandler{
                 index = i;
         });
         return index;
+    }
+
+    createYearsGroupsArray(){
+        let years = [];
+        for(let a = 2002; a <= 2012; a++){
+            years.push({
+                year: a,
+                deadPeople: 0
+            });
+        }
+        return years;
     }
 
     createReasonsArray(){
