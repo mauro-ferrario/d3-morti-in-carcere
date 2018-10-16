@@ -7,9 +7,9 @@ export default class{
         this.maxChartWidth = maxChartWidth;
         this.barWidth = this.maxChartWidth/this.data.length;
         this.maxBarHeight = maxBarHeight;
+        this.extraSettingsBeforeCreateBars();
         this.barConvertIntoRange = d3.scaleLinear().range([0, this.maxBarHeight]);
         this.setBarsDomain(data)
-        this.extraSettingsBeforeCreateBars();
         this.bars = this.createMainBarsGroups();
         this.createSingleBarsContent();
     }

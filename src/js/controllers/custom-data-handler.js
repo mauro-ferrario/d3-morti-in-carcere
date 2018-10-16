@@ -8,8 +8,7 @@ export default class extends dataHandler{
     manipulateData(data){
         this.data = {};
         this.createDataArrays(data);
-        console.log(this.data.years);
-        console.log(this.data.people);
+        console.log(this.data);
     }
 
     createDataArrays(data){
@@ -27,14 +26,6 @@ export default class extends dataHandler{
         this.data.years = this.createYearsGroupsArray();
         this.data.prisons = this.createPrisonsArray(data);
         this.data.people = [];
-        // this.data.reasonsByAge = [
-        //     {
-        //         reasonId: 0,
-        //         years: {
-        //             2012: 10
-        //         }
-        //     }
-        // ];
         this.data.reasonByAge = [];
 
         this.data.reasons.map((reason, i)=>{
@@ -49,7 +40,6 @@ export default class extends dataHandler{
             });
         });
 
-        console.log(this.data.reasonByAge);
 
         data.map((info)=>{
             const prisonId = this.getPrisonIdFromPrisonEmail(this.data.prisons, info['Email']);
@@ -68,9 +58,6 @@ export default class extends dataHandler{
                 prisonId: prisonId
             });
         });
-        console.log("***");
-       // console.log(this.data.reasonByAge);
-        console.log("***");
     }
 
     getReasonId(reasonToCheck){
@@ -151,8 +138,6 @@ export default class extends dataHandler{
                 return 1;
           return 0;
         }
-        console.log(orderValue);
-        
       }
 
     getOrderArray(arr, orderValue){
